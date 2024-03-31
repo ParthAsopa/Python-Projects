@@ -58,9 +58,12 @@ async def add_task(ctx, name, *, task):
 async def complete_task(ctx, name, task_number: int):
     task_number -= 1
     if name in lists and 0 <= task_number < len(lists[name]["tasks"]):
+        task_to_complete = lists[name]["tasks"][task_number]
         lists[name]["tasks"][task_number] = f'~~{lists[name]["tasks"][task_number]}~~'
         await update_message(name)
-        await ctx.send(f"Task marked as completed in the list `{name}`!")
+        await ctx.send(
+            f"`{task_number}. {task_to_complete}` marked as completed in the list `{name}`!"
+        )
         # Save lists to a file after adding a new task
         await save_lists(ctx)
 
@@ -86,9 +89,12 @@ async def update_message(name):
 async def remove_task(ctx, name, task_number: int):
     task_number -= 1
     if name in lists and 0 <= task_number < len(lists[name]["tasks"]):
+        task_to_remove = lists[name]["tasks"][task_number]
         del lists[name]["tasks"][task_number]
         await update_message(name)
-        await ctx.send(f"Task {task_number + 1} removed from the list `{name}`!")
+        await ctx.send(
+            f"`{task_number + 1}. {task_to_remove}`  removed from the list `{name}`!"
+        )
         # Save lists to a file after adding a new task
         await save_lists(ctx)
 
@@ -193,4 +199,4 @@ async def on_disconnect():
         json.dump(lists, file)
 
 
-bot.run("MTIwNDMzOTU2ODM4MDQ4NTY0Mg.GWSY_W.lDpwYKQIiNwGmjBbBlHBJa96O3rrGVfK3_SS_4")
+bot.run("MTIwNDMzOTU2ODM4MDQ4NTY0Mg.GdjK5g.M-5oeFGZ7qA7wjakW3hzVmxgLj6k3Jy6gF1IBc")
