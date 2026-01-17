@@ -4,10 +4,10 @@
 SET "BATCH_DIR=%~dp0"
 
 :: Set the path to the venv's Python executable
-SET "VENV_PYTHON=%BATCH_DIR%selenium_libs\Scripts\python.exe"
+SET "VENV_PYTHON=%BATCH_DIR%..\selenium_libs\Scripts\python.exe"
 
 :: Set the path to your Python script
-SET "PY_SCRIPT=%BATCH_DIR%WiFi_Login.py"
+SET "PY_SCRIPT=%BATCH_DIR%WiFi_Logout.py"
 
 :: Run the script using the venv's Python
 echo "--- Running your Python script with the venv ---"

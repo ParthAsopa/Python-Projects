@@ -1,12 +1,16 @@
 import discord
 from discord.ext import commands
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 FILE_PATH = "lists.json"
-
+bot_token=os.getenv("bot_token")
 # Load existing lists or initialize an empty dictionary
 try:
     with open(FILE_PATH, "r") as file:
@@ -199,4 +203,4 @@ async def on_disconnect():
         json.dump(lists, file)
 
 
-bot.run("MTIwNDMzOTU2ODM4MDQ4NTY0Mg.GdjK5g.M-5oeFGZ7qA7wjakW3hzVmxgLj6k3Jy6gF1IBc")
+bot.run(bot_token)
