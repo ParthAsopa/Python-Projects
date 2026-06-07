@@ -1,70 +1,64 @@
-# Python Projects Repository
+# Python Projects
 
-A collection of personal Python projects exploring different domains and libraries. This repository serves as a learning sandbox and practical experimentation space for various automation, web, and utility development tasks.
+A collection of personal Python projects spanning automation, web development, Discord bots, and utility tooling. This repository is a sandbox for learning, experimentation, and building practical things.
 
-## Projects Overview
+---
 
-### 1. Bank ([bank.py](bank.py))
+## Projects
 
-A banking-related Python module. Purpose and functionality to be documented.
+### 1. Statver ([Statver/](Statver/))
 
-### 2. Lister ([Lister/](Lister/))
+A lightweight Discord bot that broadcasts a live-updating hardware telemetry dashboard for a headless bare-metal Linux server. Reads CPU, RAM, thermals, battery state, and storage directly from the Linux `/sys/class/` filesystem and `psutil`, posting a refreshed embed to Discord every 2 minutes. Deployed as a `systemd` background service.
 
-A list management application with JSON-based data storage.
+**Stack:** Python · discord.py · psutil · python-dotenv
+
+---
+
+### 2. Selenium Automation ([Selenium/](Selenium/))
+
+Learning and experimentation workspace for Selenium WebDriver-based browser automation.
+
+**Sub-projects:**
+- **WiFi Login Automation** ([`WiFi_Login/`](Selenium/WiFi_Login/)) — Automated hostel firewall login/logout using Edge WebDriver
 
 **Key Files:**
+- [`main.py`](Selenium/main.py) — Main experimentation entry point
+- [`Automated Login.py`](Selenium/Automated%20Login.py) — Login automation scripts
 
-- [`main.py`](Lister/main.py) - Main application logic
-- [`lists.json`](Lister/lists.json) - Data persistence layer
-- [`.env`](Lister/.env) - Environment configuration
+---
 
 ### 3. Flask Web Application ([Flask/](Flask/))
 
-A Flask-based web application with templating and static assets.
+A Flask-based web application with Jinja2 templating and static asset serving.
 
 **Key Files:**
+- [`temp.py`](Flask/temp.py) — Application entry point
+- [`templates/index.html`](Flask/templates/index.html) — Web interface
+- [`static/`](Flask/static/) — CSS, JS, and images
 
-- [`temp.py`](Flask/temp.py) - Application code
-- [`templates/index.html`](Flask/templates/index.html) - Web interface
-- [`static/`](Flask/static/) - Static assets (CSS, JS, images)
+---
 
-### 4. Selenium Automation ([Selenium/](Selenium/))
+### 4. Lister ([Lister/](Lister/))
 
-Learning and experimentation workspace for Selenium WebDriver-based web automation.
-
-**Sub-Projects:**
-
-- **WiFi Login Automation** ([`WiFi_Login/`](Selenium/WiFi_Login/)) - Automated hostel firewall login/logout system using Edge browser
-- **General Scripts** - Experimentation and learning examples
+A simple list management CLI app with JSON-based persistence.
 
 **Key Files:**
+- [`main.py`](Lister/main.py) — Application logic
+- [`lists.json`](Lister/lists.json) — Data storage
 
-- [`main.py`](Selenium/main.py) - Main experimentation entry point
-- [`Automated Login.py`](Selenium/Automated%20Login.py) - Login automation examples
+---
 
 ## Repository Structure
 
 ```
-├── bank.py                 # Banking module
-├── main.py               # Root entry point
-├── Flask/                # Flask web application
-├── Lister/               # List management app
-└── Selenium/             # Web automation projects
-    ├── WiFi_Login/       # WiFi firewall automation
-    └── selenium_libs/    # Local Selenium dependencies
+├── Statver/               # Discord telemetry bot
+├── Flask/                 # Flask web app
+├── Lister/                # List management utility
+└── Selenium/              # Browser automation
+    ├── WiFi_Login/
+    └── selenium_libs/
 ```
-
-## Purpose
-
-This repository is a personal learning and development space for:
-
-- Experimenting with Python web frameworks (Flask)
-- Exploring web automation (Selenium)
-- Building utility applications (List management)
-- General Python development practice
-
-Each project operates independently and reflects ongoing learning in different areas of Python development.
 
 ---
 
-_Last Updated: 2024_
+*Each project runs independently. See the individual project folders for setup instructions.*
