@@ -2,6 +2,7 @@ import discord
 from discord.ext import tasks
 import psutil
 import os
+import datetime
 from dotenv import load_dotenv
 
 # Load the environment variables from the hidden .env file
@@ -52,6 +53,11 @@ class StatverBot(discord.Client):
         ram = psutil.virtual_memory()
         cpu = psutil.cpu_percent(interval=1)
         
+        # Calculate Exact Uptime
+        boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
+        uptime = datetime.datetime.now() - boot_time
+        uptime_str = str(uptime).split('.')[0]  # Formats neatly to Hours:Minutes:Seconds
+        
         # Storage Metrics
         try:
             disk = psutil.disk_usage(STORAGE_PATH)
@@ -62,13 +68,18 @@ class StatverBot(discord.Client):
             storage_str = f"Path '{STORAGE_PATH}' not found."
 
         # Build Statver Discord Embed
-        embed = discord.Embed(title="🟢 Statver Live Telemetry", color=0x00ff00)
+        embed = discord.Embed(
+            title="🟢 Statver Live Telemetry", 
+            color=0x00ff00,
+            timestamp=discord.utils.utcnow()  # Injects the exact local refresh time
+        )
+        embed.add_field(name="System Uptime", value=uptime_str, inline=False)
         embed.add_field(name="CPU Usage", value=f"{cpu}%", inline=True)
         embed.add_field(name="RAM Usage", value=f"{ram.percent}%", inline=True)
         embed.add_field(name="Temperature", value=self.get_temperature(), inline=True)
         embed.add_field(name="Cloud Storage", value=storage_str, inline=False)
         embed.add_field(name="Power Supply", value=self.get_battery(), inline=False)
-        embed.set_footer(text="Statver auto-updating every 2 minutes")
+        embed.set_footer(text="Statver Heartbeat")
 
         # Edit existing message or send a new one
         if self.status_message:
