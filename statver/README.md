@@ -22,18 +22,19 @@ Statver is designed specifically for **headless server environments** — repurp
 - **Targeted Storage Monitoring** — Tracks a specific mount point (e.g. a Samba share) rather than just the root OS partition.
 - **Production-Grade Deployment** — Ships with a `systemd` unit file so it runs as a background daemon, survives reboots, and auto-restarts on failure.
 - **Secure Credential Handling** — API token and channel ID are kept out of source code via `python-dotenv`.
+- **Low Battery Alerts** — Automatically pings the server manager when battery falls below 20%, with escalating notifications at 20%, 15%, 10%, then every 2 minutes until charging resumes.
 
 ---
 
 ## Tech Stack
 
-| Component | Details |
-|---|---|
-| Language | Python 3.14 |
-| Discord Integration | `discord.py` |
-| System Metrics | `psutil` |
-| Secrets Management | `python-dotenv` |
-| Target OS | Ubuntu / Debian Linux |
+| Component           | Details               |
+| ------------------- | --------------------- |
+| Language            | Python 3.14           |
+| Discord Integration | `discord.py`          |
+| System Metrics      | `psutil`              |
+| Secrets Management  | `python-dotenv`       |
+| Target OS           | Ubuntu / Debian Linux |
 
 ---
 
@@ -72,13 +73,15 @@ Add the following, replacing the placeholder values with your own:
 STATVER_DISCORD_TOKEN=your_bot_token_here
 STATVER_CHANNEL_ID=your_discord_channel_id_here
 STATVER_STORAGE_PATH=/srv/CloudDrive
+SERVER_MANAGER_ID=your_server_manager_user_id_here
 ```
 
-| Variable | Description |
-|---|---|
-| `STATVER_DISCORD_TOKEN` | Your bot's secret token from the Developer Portal |
-| `STATVER_CHANNEL_ID` | The ID of the Discord channel to post the dashboard in |
-| `STATVER_STORAGE_PATH` | The mount point you want to track (e.g. your Samba share) |
+| Variable                | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| `STATVER_DISCORD_TOKEN` | Your bot's secret token from the Developer Portal                 |
+| `STATVER_CHANNEL_ID`    | The ID of the Discord channel to post the dashboard in            |
+| `STATVER_STORAGE_PATH`  | The mount point you want to track (e.g. your Samba share)         |
+| `SERVER_MANAGER_ID`     | Discord user ID of the server manager to ping when battery is low |
 
 ---
 
@@ -146,6 +149,7 @@ sudo systemctl status statver
 **Dashboard embed isn't updating even though the bot is online**
 
 Verify the bot has the following permissions in the target channel:
+
 - `Send Messages`
 - `Read Message History`
 - `Manage Messages`

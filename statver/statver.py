@@ -12,6 +12,7 @@ load_dotenv()
 TOKEN = os.getenv('STATVER_DISCORD_TOKEN')
 CHANNEL_ID = int(os.getenv('STATVER_CHANNEL_ID')) 
 STORAGE_PATH = os.getenv('STATVER_STORAGE_PATH')
+SERVER_MANAGER_ID = int(os.getenv('SERVER_MANAGER_ID'))
 
 class StatverBot(discord.Client):
     def __init__(self):
@@ -24,12 +25,21 @@ class StatverBot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user} - Statver Telemetry Online')
 
-    def get_battery(self):
+    async def get_battery(self):
         try:
             with open('/sys/class/power_supply/BAT0/capacity', 'r') as f:
                 cap = f.read().strip()
             with open('/sys/class/power_supply/BAT0/status', 'r') as f:
                 status = f.read().strip()
+            if int(cap)<=20 and status=="Discharging":
+                message=f"<@{SERVER_MANAGER_ID}> Battery low!! Only {cap}% left!!"
+                match cap:
+                    case "20":
+                        await self.get_channel(CHANNEL_ID).send(message)
+                    case "15":
+                        await self.get_channel(CHANNEL_ID).send(message)
+                if int(cap)<=10 and status=="Discharging":
+                        await self.get_channel(CHANNEL_ID).send(message)
             return f"{cap}% [{status}]"
         except FileNotFoundError:
             return "Battery data unavailable"
