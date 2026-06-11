@@ -88,7 +88,7 @@ class StatverBot(discord.Client):
         embed.add_field(name="RAM Usage", value=f"{ram.percent}%", inline=True)
         embed.add_field(name="Temperature", value=self.get_temperature(), inline=True)
         embed.add_field(name="Cloud Storage", value=storage_str, inline=False)
-        embed.add_field(name="Power Supply", value=self.get_battery(), inline=False)
+        embed.add_field(name="Power Supply", value=await self.get_battery(), inline=False)
         embed.set_footer(text="Statver Heartbeat")
 
         # Edit existing message or send a new one
