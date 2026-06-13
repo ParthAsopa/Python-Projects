@@ -18,6 +18,9 @@ class StatverBot(discord.Client):
     def __init__(self):
         super().__init__(intents=discord.Intents.default())
         self.status_message = None
+        self.bat_message=None
+        self.case_20=False
+        self.case_15=False
 
     async def setup_hook(self):
         self.update_dashboard.start()
@@ -31,15 +34,52 @@ class StatverBot(discord.Client):
                 cap = f.read().strip()
             with open('/sys/class/power_supply/BAT0/status', 'r') as f:
                 status = f.read().strip()
-            if int(cap)<=20 and status=="Discharging":
-                message=f"<@{SERVER_MANAGER_ID}> Battery low!! Only {cap}% left!!"
-                match cap:
-                    case "20":
-                        await self.get_channel(CHANNEL_ID).send(message)
-                    case "15":
-                        await self.get_channel(CHANNEL_ID).send(message)
-                if int(cap)<=10 and status=="Discharging":
-                        await self.get_channel(CHANNEL_ID).send(message)
+
+            channel = self.get_channel(CHANNEL_ID)
+            # If we don't have a channel reference, bail out gracefully
+            if not channel:
+                return f"{cap}% [{status}]"
+
+            cap_int = int(cap)
+            if cap_int <= 20 and status == "Discharging":
+                message = f"<@{SERVER_MANAGER_ID}> Battery low!! Only {cap}% left!!"
+
+                # Handle specific one-off alerts and avoid double-sends
+                if cap_int == 20:
+                    if not self.case_20:
+                        if self.bat_message:
+                            try:
+                                await self.bat_message.delete()
+                            except Exception:
+                                pass
+                        self.bat_message = await channel.send(message)
+                        self.case_20 = True
+                elif cap_int == 15:
+                    if not self.case_15:
+                        if self.bat_message:
+                            try:
+                                await self.bat_message.delete()
+                            except Exception:
+                                pass
+                        self.bat_message = await channel.send(message)
+                        self.case_15 = True
+                elif cap_int <= 10:
+                    if self.bat_message:
+                        try:
+                            await self.bat_message.delete()
+                        except Exception:
+                            pass
+                    self.bat_message = await channel.send(message)
+            else:
+                if self.bat_message:
+                    try:
+                        await self.bat_message.delete()
+                    except Exception:
+                        pass
+                self.bat_message = None
+                self.case_20 = False
+                self.case_15 = False
+
             return f"{cap}% [{status}]"
         except FileNotFoundError:
             return "Battery data unavailable"
